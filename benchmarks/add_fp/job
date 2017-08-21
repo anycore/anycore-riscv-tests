@@ -1,0 +1,1 @@
+rtlsim -s10000 -e100000 -l0 pk -c add_fp.riscv 

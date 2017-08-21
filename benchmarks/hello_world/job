@@ -1,0 +1,1 @@
+rtlsim -s150000 pk -c hello_world.riscv 

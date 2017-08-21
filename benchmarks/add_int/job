@@ -1,0 +1,1 @@
+rtlsim -s170000 -e24000 pk -c add_int.riscv 
