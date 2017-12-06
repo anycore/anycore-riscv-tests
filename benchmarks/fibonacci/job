@@ -1,0 +1,1 @@
+rtlsim -s250000 pk -c fibonacci.riscv 

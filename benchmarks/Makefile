@@ -24,12 +24,16 @@ bmarks = \
 	add_fp \
 	hello_world \
 	reduce_array \
+	branchy \
+	fibonacci \
 
 bmarks_host = \
 	add_int \
 	add_fp \
 	hello_world \
 	reduce_array \
+	branchy \
+	fibonacci \
 
 #--------------------------------------------------------------------
 # Build rules

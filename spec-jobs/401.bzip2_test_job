@@ -1,0 +1,1 @@
+rtlsim -m2048 $(SPIKE_ARGS) pk -c ./bzip2_base.riscv input.program 5 
