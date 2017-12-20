@@ -1,6 +1,5 @@
 RISCV_INSTALL_DIR = 
 SIMPOINT_TOOL_DIR = 
-SPIKE_ARGS = 100000000
 
 bmarks = 401.bzip2
 #chkpt_skip_amt = 1000  #In millions
@@ -24,7 +23,12 @@ check_simpoint_dir:
 		echo "Error: Please set SIMPOINT_TOOL_DIR to the simpoint tool build path."; exit 2; \
 	else true; fi
 
-#TODO: Dump all checkpoints as gzip files instead of plain files
+
+#################################################################################
+## SPEC 2017 
+#################################################################################
+
+## INT Test Set
 
 400.perlbench_test:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./perlbench_base.riscv -I. -I./lib test.pl  2>&1 | tee run.log 
 401.bzip2_test: 			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./bzip2_base.riscv input.program 5 2>&1 | tee run.log 
@@ -40,26 +44,29 @@ check_simpoint_dir:
 483.xalancbmk_test:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./Xalan_base.riscv -v test.xml xalanc.xsl 2>&1 | tee run.log 
 
 
+## FP Test Set
+
 410.bwaves_test:			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./bwaves_base.riscv 2>&1 | tee run.log 
 416.gamess_test:   		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gamess_base.riscv < exam29.config 2>&1 | tee run.log
 433.milc_test:  			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./milc_base.riscv < su3imp.in 2>&1 | tee run.log
 434.zeusmp_test:    	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./zeusmp_base.riscv 2>&1 | tee run.log
-#435.gromacs_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gromacs_base.riscv -silent -deffnm gromacs -nice 0 2>&1 | tee run.log
+435.gromacs_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gromacs_base.riscv -silent -deffnm gromacs -nice 0 2>&1 | tee run.log
 436.cactusADM_test:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./cactusADM_base.riscv benchADM.par 2>&1 | tee run.log
 437.leslie3d_test:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./leslie3d_base.riscv < leslie3d.in 2>&1 | tee run.log
-#444.namd_test:    		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./namd_base.riscv --input namd.input --iterations 38 --output namd.out 2>&1 | tee run.log
+444.namd_test:    		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./namd_base.riscv --input namd.input --iterations 1 --output namd.out 2>&1 | tee run.log
 #447.dealII_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./dealII_base.riscv 23 2>&1 | tee run.log
-#450.soplex_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./soplex_base.riscv -s1 -e -m45000 pds-50.mps 2>&1 | tee run.log
+450.soplex_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./soplex_base.riscv -s1 -e -m10000 test.mps 2>&1 | tee run.log
 453.povray_test:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./povray_base.riscv SPEC-benchmark-test.ini 2>&1 | tee run.log
 454.calculix_test:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./calculix_base.riscv -i beampic 2>&1 | tee run.log
 459.gems_test:     		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gems_base.riscv 2>&1 | tee run.log
 465.tonto_test:    		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./tonto_base.riscv 2>&1 | tee run.log
-#470.lbm_test:     		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./lbm_base.riscv 3000 reference.dat 0 0 100_100_130_ldc.of 2>&1 | tee run.log
+470.lbm_test:     		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./lbm_base.riscv 20 reference.dat 0 1 100_100_130_cf.of 2>&1 | tee run.log
 481.wrf_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./wrf_base.riscv 2>&1 | tee run.log
 482.sphinx3_test: 		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./sphinx3_base.riscv ctlfile . args.an4 2>&1 | tee run.log
 
 
-## Ref Inputs
+## INT Ref Set
+
 400.perlbench_ref:	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./perlbench_base.riscv -I. -I./lib test.pl  2>&1 | tee run.log 
 401.bzip2_ref: 			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./bzip2_base.riscv input.program 5 2>&1 | tee run.log 
 401.gcc_ref: 				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gcc_base.riscv expr.i -o expr.s 2>&1 | tee run.log 
@@ -73,6 +80,7 @@ check_simpoint_dir:
 473.astar_ref: 			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./astar_base.riscv BigLakes2048.cfg 2>&1 | tee run.log 
 483.xalancbmk_ref:	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./xalan_base.riscv -v t5.xml xalanc.xsl 2>&1 | tee run.log 
 
+## FP Ref Set
 
 410.bwaves_ref:			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./bwaves_base.riscv 2>&1 | tee run.log 
 416.gamess_ref:   	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./gamess_base.riscv < cytosine.2.config 2>&1 | tee run.log
@@ -82,7 +90,7 @@ check_simpoint_dir:
 436.cactusADM_ref:	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./cactus_base.riscv benchADM.par 2>&1 | tee run.log
 437.leslie3d_ref:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./leslie3d_base.riscv < leslie3d.in 2>&1 | tee run.log
 444.namd_ref:    		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./namd_base.riscv --input namd.input --iterations 38 --output namd.out 2>&1 | tee run.log
-447.dealII_ref:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./dealII_base.riscv 23 2>&1 | tee run.log
+#447.dealII_ref:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./dealII_base.riscv 23 2>&1 | tee run.log
 450.soplex_ref:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./soplex_base.riscv -s1 -e -m45000 pds-50.mps 2>&1 | tee run.log
 453.povray_ref:  		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./povray_base.riscv SPEC-benchmark-ref.ini 2>&1 | tee run.log
 454.calculix_ref:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./calculix_base.riscv -i hyperviscoplastic 2>&1 | tee run.log
@@ -90,8 +98,102 @@ check_simpoint_dir:
 470.lbm_ref:     		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./lbm_base.riscv 3000 reference.dat 0 0 100_100_130_ldc.of 2>&1 | tee run.log
 482.sphinx3_ref: 		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m2048 $(SPIKE_ARGS) pk -c ./sphinx3_base.riscv ctlfile . args.an4 2>&1 | tee run.log
 
+
+#################################################################################
+## SPEC 2017 
+#################################################################################
+
+## INT SPEED
+
+600.perlbench_s_rand_test:	;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c perlbench_s_base.riscv-m64 -I. -I./lib makerand.pl 2>&1 | tee run.log
+600.perlbench_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c perlbench_s_base.riscv-m64 -I. -I./lib test.pl 2>&1 | tee run.log
+605.mcf_s_test:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c mcf_s_base.riscv-m64 inp.in  2>&1 | tee run.log
+623.xalancbmk_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xalancbmk_s_base.riscv-m64 -v test.xml xalanc.xsl 2>&1 | tee run.log
+625.x264_s_test:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c ldecod_s_base.riscv-m64 -i BuckBunny.264 -o BuckBunny.yuv 2>&1 | tee run.log
+641.leela_s_test:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c leela_s_base.riscv-m64 test.sgf 2>&1 | tee run.log
+648.exchange2_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c exchange2_s_base.riscv-m64 0 
+
+# These run into SYSCALL #96 or other which is not supported by pk
+602.gcc_s_test:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c sgcc_base.riscv-m64 t1.c -O3 -finline-limit=50000 -o t1.opts-O3_-finline-limit_50000.s >&1 | tee run.log 
+620.omnetpp_s_test:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c omnetpp_s_base.riscv-m64 -c General -r 0 2>&1 | tee run.log 
+631.deepsjeng_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c deepsjeng_s_base.riscv-m64 test.txt 2>&1 | tee run.log 
+657.xz_s_4_0_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1548636 1555348 0 2>&1 | tee run.log
+657.xz_s_4_1_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1462248 -1 1 2>&1 | tee run.log
+657.xz_s_4_2_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1428548 -1 2 2>&1 | tee run.log
+657.xz_s_4_3e_test:   			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1034828 -1 3e 2>&1 | tee run.log
+657.xz_s_4_4_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1061968 -1 4 2>&1 | tee run.log
+657.xz_s_4_4e_test:   			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1034588 -1 4e 2>&1 | tee run.log
+657.xz_s_1_0_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 650156 -1 0 2>&1 | tee run.log
+657.xz_s_1_1_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 639996 -1 1  2>&1 | tee run.log
+657.xz_s_1_2_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 637616 -1 2 2>&1 | tee run.log
+657.xz_s_1_3e_test:   			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 628996 -1 3e 2>&1 | tee run.log
+657.xz_s_1_4_test:    			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 631912 -1 4 2>&1 | tee run.log
+657.xz_s_1_4e_test:   			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 629064 -1 4e 2>&1 | tee run.log
+
+## FP SPEED
+
+# These run into SYSCALL #96 or other which is not supported by pk
+603.bwaves_s_1_test:  			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_bwaves_base.riscv-m64 bwaves_1 < bwaves_1.in 2>&1 | tee run.log
+603.bwaves_s_2_test:  			;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_bwaves_base.riscv-m64 bwaves_2 < bwaves_2.in 2>&1 | tee run.log
+607.cactuBSSN_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c cactuBSSN_s_base.riscv-m64 spec_test.par 2>&1 | tee run.log   
+619.lbm_s_test:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c lbm_s_base.riscv-m64 20 reference.dat 0 1 200_200_260_ldc.of 2>&1 | tee run.log 
+621.wrf_s_test:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c wrf_s_base.riscv-m64 2>&1 | tee run.log 
+627.cam4_s_test:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike  -m4096 $(SPIKE_ARGS) pk -c cam4_s_base.riscv-m64 2>&1 | tee run.log 
+628.pop2_s_test:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_pop2_base.riscv-m64 2>&1 | tee run.log 
+638.imagick_s_test:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c imagick_s_base.riscv-m64 -limit disk 0 test_input.tga -shear 25 -resize 640x480 -negate -alpha Off test_output.tga 2>&1 | tee run.log 
+644.nab_s_test:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c nab_s_base.riscv-m64 hkrdenq 1930344093 1000 2>&1 | tee run.log 
+649.fotonik3d_s_test:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c fotonik3d_s_base.riscv-m64 2>&1 | tee run.log 
+654.roms_s_test:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c sroms_base.riscv-m64 < ocean_benchmark0.in 2>&1 | tee run.log 
+
+
+
+#### REF Inputs
+## INT SPEED
+
+600.perlbench_s_rand_ref:		;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c perlbench_s_base.riscv-m64 -I. -I./lib makerand.pl 2>&1 | tee run.log
+600.perlbench_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c perlbench_s_base.riscv-m64 -I. -I./lib test.pl 2>&1 | tee run.log
+605.mcf_s_ref:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c mcf_s_base.riscv-m64 inp.in  2>&1 | tee run.log
+623.xalancbmk_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xalancbmk_s_base.riscv-m64 -v test.xml xalanc.xsl 2>&1 | tee run.log
+625.x264_s_ref:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c ldecod_s_base.riscv-m64 -i BuckBunny.264 -o BuckBunny.yuv 2>&1 | tee run.log
+641.leela_s_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c leela_s_base.riscv-m64 test.sgf 2>&1 | tee run.log
+648.exchange2_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c exchange2_s_base.riscv-m64 0 
+
+# These run into SYSCALL #96 or other which is not supported by pk
+602.gcc_s_ref:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c sgcc_base.riscv-m64 t1.c -O3 -finline-limit=50000 -o t1.opts-O3_-finline-limit_50000.s >&1 | tee run.log 
+620.omnetpp_s_ref:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c omnetpp_s_base.riscv-m64 -c General -r 0 2>&1 | tee run.log 
+631.deepsjeng_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c deepsjeng_s_base.riscv-m64 test.txt 2>&1 | tee run.log 
+657.xz_s_4_0_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1548636 1555348 0 2>&1 | tee run.log
+657.xz_s_4_1_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1462248 -1 1 2>&1 | tee run.log
+657.xz_s_4_2_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1428548 -1 2 2>&1 | tee run.log
+657.xz_s_4_3e_ref:   				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1034828 -1 3e 2>&1 | tee run.log
+657.xz_s_4_4_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1061968 -1 4 2>&1 | tee run.log
+657.xz_s_4_4e_ref:   				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 4 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1034588 -1 4e 2>&1 | tee run.log
+657.xz_s_1_0_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 650156 -1 0 2>&1 | tee run.log
+657.xz_s_1_1_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 639996 -1 1  2>&1 | tee run.log
+657.xz_s_1_2_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 637616 -1 2 2>&1 | tee run.log
+657.xz_s_1_3e_ref:   				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 628996 -1 3e 2>&1 | tee run.log
+657.xz_s_1_4_ref:    				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 631912 -1 4 2>&1 | tee run.log
+657.xz_s_1_4e_ref:   				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c xz_s_base.riscv-m64 cpu2006docs.tar.xz 1 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 629064 -1 4e 2>&1 | tee run.log
+
+## FP SPEED
+
+# These run into SYSCALL #96 or other which is not supported by pk
+603.bwaves_s_1_ref:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_bwaves_base.riscv-m64 bwaves_1 < bwaves_1.in 2>&1 | tee run.log
+603.bwaves_s_2_ref:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_bwaves_base.riscv-m64 bwaves_2 < bwaves_2.in 2>&1 | tee run.log
+607.cactuBSSN_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c cactuBSSN_s_base.riscv-m64 spec_ref.par 2>&1 | tee run.log   
+619.lbm_s_ref:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c lbm_s_base.riscv-m64 20 reference.dat 0 1 200_200_260_ldc.of 2>&1 | tee run.log 
+621.wrf_s_ref:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c wrf_s_base.riscv-m64 2>&1 | tee run.log 
+627.cam4_s_ref:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike  -m4096 $(SPIKE_ARGS) pk -c cam4_s_base.riscv-m64 2>&1 | tee run.log 
+628.pop2_s_ref:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c speed_pop2_base.riscv-m64 2>&1 | tee run.log 
+638.imagick_s_ref:  				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c imagick_s_base.riscv-m64 -limit disk 0 test_input.tga -shear 25 -resize 640x480 -negate -alpha Off test_output.tga 2>&1 | tee run.log 
+644.nab_s_ref:      				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c nab_s_base.riscv-m64 hkrdenq 1930344093 1000 2>&1 | tee run.log 
+649.fotonik3d_s_ref:				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c fotonik3d_s_base.riscv-m64 2>&1 | tee run.log 
+654.roms_s_ref:     				;nice -19 $(RISCV_INSTALL_DIR)/bin/spike	-m4096 $(SPIKE_ARGS) pk -c sroms_base.riscv-m64 < ocean_benchmark0.in 2>&1 | tee run.log 
+
+
+
+
 .ONESHELL:
 .PHONY: simpoints
-#simpoints:	;gunzip bbv_proc_0.bb.gz -c > bbv.bb ; /home/rbasuro/SimPoint.3.2/bin/simpoint -maxK 10 -saveSimpoints simpoints -saveSimpointWeights weights -loadFVFile bbv.bb
 simpoints:	check_simpoint_dir
 	-gunzip bbv_proc_0.bb.gz -c > bbv.bb ; $(SIMPOINT_TOOL_DIR)/bin/simpoint -maxK 10 -saveSimpoints simpoints -saveSimpointWeights weights -loadFVFile bbv.bb

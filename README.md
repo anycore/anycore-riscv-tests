@@ -1,4 +1,4 @@
-#User Guide for AnyCore RISC-V Test Infrastructure
+User Guide for AnyCore RISC-V Test Infrastructure
 ===========================================================================
 
 1. [Quickstart](#quickstart)
@@ -7,7 +7,7 @@
 2. [Run RTL Simulations](#rtl-sim)
 3. [Gather Simpoints](#build-tools)
 
-# <a name="quickstart"></a>Run Functional Simulator (Spike)
+# <a name="quickstart"></a>Quickstart
 This has the regression test environment and testcases for the AnyCore RTL and
 Spike RISC-V functional simulator. The infrastructure is make driven and can use 
 parallel make to run multiple simulatios in parallel. Simulations are run in a
@@ -42,7 +42,8 @@ can use one of the existing microbenchmark as a template to add new microbenchma
 in the folder. Don't forget to also add the microbenchmark name in benchmarks/Makefile
 so that it can be built.
 
-Build the microbenchmarks by running
+Build the microbenchmarks by running:
+
     % make micro-build
 
 Then add the testcase to "all_spike_tests" in bmarks.mk. Follow the examples
