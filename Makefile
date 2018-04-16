@@ -1,12 +1,22 @@
-## Important paths
+###### NOTE: You must edit these paths according to your enviroment #########
+
+## Important paths ####################################
 # This is where all tests are run
-#SCRATCH_SPACE 		= $(abspath ../scratch)
-SCRATCH_SPACE 		= /local/home/rbasuro/riscv-new-scratch
+SCRATCH_SPACE 		= /home/rbasuro/riscv-new-scratch
 
 # This is the path where RISC-V tools are installed
 RISCV_INSTALL_DIR	= $(abspath ../install)
+RISCV_CHKPTS_DIR	= /home/rbasuro/riscv-new-scratch/riscv-checkpoints
 
-SIMPOINT_TOOL_DIR	= $(abspath ../../SimPoint.3.2)
+SIMPOINT_TOOL_DIR	= /home/rbasuro/gitrepos/riscv/SimPoint.3.2
+
+# Path to the benchmark build directory (location of compiled binaries, ref_inputs etc.)
+# If using Speckle to compile SPEC benchmakrs, provide the path to the Speckle build directory.
+SPEC_BIN_DIR 			=  /home/rbasuro/gitrepos/riscv/Speckle/riscv-m64-spec
+
+###### NOTE: You must edit the paths above according to your enviroment #########
+
+
 
 ###### The contents below are advanced and should only be changed if absolutely necessary ####
 
@@ -15,14 +25,16 @@ ANYCORE_TEST_DIR 	= $(PWD)
 ANYCORE_BASE_DIR 	= $(realpath $(ANYCORE_TEST_DIR)/..)
 VERILOG_SRC_DIR	 	= $(ANYCORE_BASE_DIR)/anycore-riscv-src
 SYNTH_BASE_DIR 	 	= $(ANYCORE_BASE_DIR)/anycore-riscv-synth
+SCRIPTS_DIR      	= $(abspath scripts)
 
 ## Following are the run directories for the various testcases
+SPEC_JOBS_DIR			= $(ANYCORE_TEST_DIR)/spec-jobs
 MICRO_SRC_DIR 		= $(ANYCORE_TEST_DIR)/benchmarks
 RTL_TEST_DIR 			= $(SCRATCH_SPACE)/anycore_rtl_test
 GATE_TEST_DIR 		= $(SCRATCH_SPACE)/anycore_gate_test
 SPIKE_TEST_DIR  	= $(SCRATCH_SPACE)/spike_test
-BMARK_CHKPT_DIR 	= $(SCRATCH_SPACE)/riscv_chkpts
-BMARK_SMPT_DIR 		= $(SCRATCH_SPACE)/riscv_smpts
+CHKPT_TEST_DIR 		= $(SCRATCH_SPACE)/riscv_chkpts
+SMPT_TEST_DIR 			= $(SCRATCH_SPACE)/riscv_smpts
 SIMPOINT_INTERVAL = 100000000
 
 # Benchmarks and testcases are specified in a separate file and included here.
@@ -123,8 +135,12 @@ $(1):
 	#echo "1:$1 2:$2 3:$3 4:$4"
 	-mkdir -p $(SPIKE_TEST_DIR)/$(3)/$(4); \
 	cp -f $(ANYCORE_TEST_DIR)/spike.mk $(SPIKE_TEST_DIR)/$(3)/$(4)/Makefile; \
+	sed -i -e 's:RISCV_INSTALL_DIR_PLACEHOLDER:$(RISCV_INSTALL_DIR):g' $(SPIKE_TEST_DIR)/$(3)/$(4)/Makefile; \
+	sed -i -e 's:SIMPOINT_TOOL_DIR_PLACEHOLDER:$(SIMPOINT_TOOL_DIR):g' $(SPIKE_TEST_DIR)/$(3)/$(4)/Makefile; \
+	sed -i -e 's:BMARKS_PLACEHOLDER:$(3):g' $(SPIKE_TEST_DIR)/$(3)/$(4)/Makefile; \
+	sed -i -e 's:SPIKE_ARGS_PLACEHOLDER:"$(5) -e$(SIMPOINT_INTERVAL)":g' $(SPIKE_TEST_DIR)/$(3)/$(4)/Makefile; \
 	cp -rf $(2)/* $(SPIKE_TEST_DIR)/$(3)/$(4)/ 2>/dev/null | :;	\
-	$(MAKE) -C $(SPIKE_TEST_DIR)/$(3)/$(4) -f Makefile bmarks=$(3) RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="$(5)" 
+	$(MAKE) -C $(SPIKE_TEST_DIR)/$(3)/$(4) -f Makefile bmarks=$(3) RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="$(5) -e$(SIMPOINT_INTERVAL)" 
 endef
 
 # Call the macro spec_test_rule(testcase,benchmark_location,benchmark,testname,arguments to Spike)  - No spaces between arguments
@@ -144,15 +160,19 @@ $(1):
 		echo "Error: The provided benchmark binary directory does not exist. Please check the path."; exit 2; \
 	else true; fi
 	echo "BMARK_BIN_DIR = $(2)"
-	#echo "1:$1 2:$2 3:$3 4:$4"
-	-mkdir -p $(BMARK_CHKPT_DIR)/$(3); \
-	cp -f $(ANYCORE_TEST_DIR)/spike.mk $(BMARK_CHKPT_DIR)/$(3)/Makefile; \
-	cp -rf $(2)/* $(BMARK_CHKPT_DIR)/$(3)/ 2>/dev/null | :;	\
-	$(MAKE) -C $(BMARK_CHKPT_DIR)/$(3) -f Makefile bmarks=$(3) RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="-c$(shell expr $(4) \* 1000000) -f$(3).$(4)" all
+	echo "1:$1 2:$2 3:$3 4:$4:$5"
+	-mkdir -p $(CHKPT_TEST_DIR)/$(3); \
+	cp -f $(ANYCORE_TEST_DIR)/spike.mk $(CHKPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:RISCV_INSTALL_DIR_PLACEHOLDER:$(RISCV_INSTALL_DIR):g' $(CHKPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:SIMPOINT_TOOL_DIR_PLACEHOLDER:$(SIMPOINT_TOOL_DIR):g' $(CHKPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:BMARKS_PLACEHOLDER:$(3):g' $(CHKPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:SPIKE_ARGS_PLACEHOLDER:"-c$(shell expr $(4) \* $(SIMPOINT_INTERVAL)) -f$(3).$(4).$(5)":g' $(CHKPT_TEST_DIR)/$(3)/Makefile; \
+	cp -rf $(2)/* $(CHKPT_TEST_DIR)/$(3)/ 2>/dev/null | :;	\
+	$(MAKE) -C $(CHKPT_TEST_DIR)/$(3) -f Makefile bmarks=$(3) RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="-c$(shell expr $(4) \* $(SIMPOINT_INTERVAL)) -f$(3).$(4).$(5)" all
 endef
 
-# Call the macro spec_checkpoint_rule(testcase,benchmark_location,benchmark,skip_amt) - No spaces between arguments
-$(foreach testcase,$(chkpts),$(eval $(call 	chkpt_rule,$(testcase),$(word 2,$(subst +, ,$(testcase))),$(call get_chkpt_bmark,$(testcase)),$(word 4,$(subst +, ,$(testcase))))))
+# Call the macro spec_checkpoint_rule(testcase,benchmark_location,test_name,skip_amt,weight) - No spaces between arguments
+$(foreach testcase,$(chkpts),$(eval $(call 	chkpt_rule,$(testcase),$(word 2,$(subst +, ,$(testcase))),$(call get_chkpt_bmark,$(testcase)),$(word 4,$(subst +, ,$(testcase))),$(word 5,$(subst +, ,$(testcase))))))
 
 
 ####################################################################################################
@@ -169,11 +189,15 @@ $(1):
 	echo "BMARK_BIN_DIR = $(2)"
 	echo "SIMPOINT_TOOL_DIR = $(SIMPOINT_TOOL_DIR)"
 	#echo "1:$1 2:$2 3:$3 4:$4"
-	-mkdir -p $(BMARK_SMPT_DIR)/$(3); \
-	cp -f $(ANYCORE_TEST_DIR)/spike.mk $(BMARK_SMPT_DIR)/$(3)/Makefile; \
-	cp -rf $(2)/* $(BMARK_SMPT_DIR)/$(3)/ 2>/dev/null | :;	\
-	$(MAKE) -C $(BMARK_SMPT_DIR)/$(3) -f Makefile RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="-s$(SIMPOINT_INTERVAL)" bmarks=$(3) all
-	$(MAKE) -C $(BMARK_SMPT_DIR)/$(3) -f Makefile SIMPOINT_TOOL_DIR=$(SIMPOINT_TOOL_DIR) simpoints
+	-mkdir -p $(SMPT_TEST_DIR)/$(3); \
+	cp -f $(ANYCORE_TEST_DIR)/spike.mk $(SMPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:RISCV_INSTALL_DIR_PLACEHOLDER:$(RISCV_INSTALL_DIR):g' $(SMPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:SIMPOINT_TOOL_DIR_PLACEHOLDER:$(SIMPOINT_TOOL_DIR):g' $(SMPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:BMARKS_PLACEHOLDER:$(3):g' $(SMPT_TEST_DIR)/$(3)/Makefile; \
+	sed -i -e 's:SPIKE_ARGS_PLACEHOLDER:"-s$(SIMPOINT_INTERVAL)":g' $(SMPT_TEST_DIR)/$(3)/Makefile; \
+	cp -rf $(2)/* $(SMPT_TEST_DIR)/$(3)/ 2>/dev/null | :;	\
+	$(MAKE) -C $(SMPT_TEST_DIR)/$(3) -f Makefile RISCV_INSTALL_DIR=$(RISCV_INSTALL_DIR) SPIKE_ARGS="-s$(SIMPOINT_INTERVAL)" bmarks=$(3) all
+	$(MAKE) -C $(SMPT_TEST_DIR)/$(3) -f Makefile SIMPOINT_TOOL_DIR=$(SIMPOINT_TOOL_DIR) simpoints
 endef
 
 # Call the macro spec_checkpoint_rule(testcase,benchmark_location,benchmark) - No spaces between arguments
