@@ -10,12 +10,30 @@
 ## BENCHMARK_BINARY_DIR+BENCHMARK_NAME+RTL_CONFIG_NAME+TEST_SUB_DIR+JOB_FILE_PATH+[OPTIONAL_CHECKPOINT_PATH]
 
 ## Testcases for microbenchmarks that run from the begining
+## CHANGES HERE: 
 rtl_micro_tests =	\
 				$(MICRO_SRC_DIR)/fibonacci/install+fibonacci+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-				$(MICRO_SRC_DIR)/hello_world/install+hello_world+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-				$(MICRO_SRC_DIR)/hellow_world/install+add_int+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-				$(MICRO_SRC_DIR)/hello_world/install+reduce_array+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-				$(MICRO_SRC_DIR)/branchy/install+brancy+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
+				$(MICRO_SRC_DIR)/fibonacci/install+fibonacci+Config2+$(MICRO_SRC_DIR)/fibonacci/job	\
+				$(MICRO_SRC_DIR)/hello_world/install+hello_world+Config1+$(MICRO_SRC_DIR)/hello_world/job	\
+				$(MICRO_SRC_DIR)/hello_world/install+hello_world+Config2+$(MICRO_SRC_DIR)/hello_world/job	\
+				$(MICRO_SRC_DIR)/add_int/install+add_int+Config1+$(MICRO_SRC_DIR)/add_int/job	\
+				$(MICRO_SRC_DIR)/add_int/install+add_int+Config2+$(MICRO_SRC_DIR)/add_int/job	\
+				$(MICRO_SRC_DIR)/add_fp/install+add_fp+Config1+$(MICRO_SRC_DIR)/add_fp/job	\
+				$(MICRO_SRC_DIR)/add_fp/install+add_fp+Config2+$(MICRO_SRC_DIR)/add_fp/job	\
+				$(MICRO_SRC_DIR)/reduce_array/install+reduce_array+Config1+$(MICRO_SRC_DIR)/reduce_array/job	\
+				$(MICRO_SRC_DIR)/reduce_array/install+reduce_array+Config2+$(MICRO_SRC_DIR)/reduce_array/job	\
+				$(MICRO_SRC_DIR)/branchy/install+branchy+Config1+$(MICRO_SRC_DIR)/branchy/job	\
+				$(MICRO_SRC_DIR)/branchy/install+branchy+Config2+$(MICRO_SRC_DIR)/branchy/job	\
+				$(MICRO_SRC_DIR)/astar/install+astar+Config1+$(MICRO_SRC_DIR)/astar/job	\
+
+
+#rtl_micro_tests =	\
+#				$(MICRO_SRC_DIR)/fibonacci/install+fibonacci+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
+#				$(MICRO_SRC_DIR)/hello_world/install+hello_world+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
+#				$(MICRO_SRC_DIR)/hellow_world/install+add_int+Config1+$(MICRO_SRC_DIR)/fibonacci/job   \
+#				$(MICRO_SRC_DIR)/hello_world/install+reduce_array+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
+#				$(MICRO_SRC_DIR)/branchy/install+brancy+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
+
 
 ## Testcases for benchmarks that run from the begining
 rtl_bmark_tests = \

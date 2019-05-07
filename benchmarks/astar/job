@@ -1,0 +1,1 @@
+rtlsim -m2048 -c473.astar_rivers_ref.322.0.20.gz -pk

@@ -18,7 +18,7 @@ VERILOG_SRC 			= VERILOG_SRC_DIR_PLACE_HOLDER
 CONFIG     = CONFIG_PLACE_HOLDER
 
 # Add additional flags
-DEFINES    = -64bit -turbo +define+SIM+USE_VPI+VERIFY+PRINT_EN \
+DEFINES    = -64bit -turbo +define+SIM+USE_VPI+VERIFY \
 						 -INCDIR /afs/eos.ncsu.edu/dist/syn2013.03/dw/sim_ver/ \
 						 -INCDIR $(VERILOG_SRC)/testbenches/ \
 						 #+define+WAVES
@@ -127,6 +127,13 @@ run_nc:
 	mkdir -p results
 	rm -rf *.log results/*
 	irun -top worklib.simulate:sv -sv_lib $(RISCV_INSTALL_DIR)/lib/libriscv_dpi.so $(DEFINES) $(NCSC_RUNARGS) $(FILES) 2>&1 |tee console.log 
+
+run_g:
+	clear
+	mkdir -p results
+	rm -rf *.log results/*
+	irun -gui -top worklib.simulate:sv -sv_lib $(RISCV_INSTALL_DIR)/lib/libriscv_dpi.so $(DEFINES) $(NCSC_RUNARGS) $(FILES) 2>&1 |tee console.log 
+
 
 # Runs with the gui
 run_nc_g: 

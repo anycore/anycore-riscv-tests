@@ -44,12 +44,14 @@ HOST_COMP = gcc $(HOST_OPTS)
 
 RISCV_PREFIX=riscv64-unknown-elf-
 RISCV_GCC = $(RISCV_PREFIX)gcc
-RISCV_GCC_OPTS = -static -Wa,-march=RVIMAFDXhwacha -std=gnu99 -O2 -ffast-math -msoft-float
+#RISCV_GCC_OPTS = -static -Wa,-march=RVIMAFDXhwacha -std=gnu99 -O2 -ffast-math -msoft-float
+RISCV_GCC_OPTS = -static -Wa,-march=RVIMAFDXhwacha -std=gnu99 -O0 -ffp-contract=off
 #RISCV_LINK = $(RISCV_GCC) -T $(bmarkdir)/common/test.ld $(incs)
 #RISCV_LINK_MT = $(RISCV_GCC) -T $(bmarkdir)/common/test-mt.ld
 RISCV_LINK = $(RISCV_GCC) $(incs)
 #RISCV_LINK_OPTS = -nostdlib -nostartfiles -ffast-math -lc
-RISCV_LINK_OPTS = -ffast-math -lc -msoft-float
+#RISCV_LINK_OPTS = -ffast-math -lc -msoft-float
+RISCV_LINK_OPTS =  -lc -msoft-float
 RISCV_OBJDUMP = $(RISCV_PREFIX)objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
 RISCV_SIM = spike
 
@@ -121,7 +123,7 @@ junk += $(bmarks_host_bin) $(bmarks_host_out)
 #------------------------------------------------------------
 # Default
 
-all: riscv
+all: riscv 
 
 install: install-bin
 
