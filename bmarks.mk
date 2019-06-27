@@ -27,13 +27,6 @@ rtl_micro_tests =	\
 				$(MICRO_SRC_DIR)/astar/install+astar+Config1+$(MICRO_SRC_DIR)/astar/job	\
 
 
-#rtl_micro_tests =	\
-#				$(MICRO_SRC_DIR)/fibonacci/install+fibonacci+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-#				$(MICRO_SRC_DIR)/hello_world/install+hello_world+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-#				$(MICRO_SRC_DIR)/hellow_world/install+add_int+Config1+$(MICRO_SRC_DIR)/fibonacci/job   \
-#				$(MICRO_SRC_DIR)/hello_world/install+reduce_array+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-#				$(MICRO_SRC_DIR)/branchy/install+brancy+Config1+$(MICRO_SRC_DIR)/fibonacci/job	\
-
 
 ## Testcases for benchmarks that run from the begining
 rtl_bmark_tests = \

@@ -123,7 +123,7 @@ junk += $(bmarks_host_bin) $(bmarks_host_out)
 #------------------------------------------------------------
 # Default
 
-all: riscv 
+all: riscv
 
 install: install-bin
 
