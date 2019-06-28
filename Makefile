@@ -2,7 +2,7 @@
 
 ## Important paths ####################################
 # This is where all tests are run
-SCRATCH_SPACE 		= /home/rbasuro/riscv-new-scratch
+SCRATCH_SPACE 		= /afs/eos.ncsu.edu/lockers/research/ece/ericro/users/mmkarand/scratch
 
 # This is the path where RISC-V tools are installed
 RISCV_INSTALL_DIR	= $(abspath ../install)
@@ -42,6 +42,9 @@ SIMPOINT_INTERVAL = 100000000
 # other tests, you must modify this file.
 include bmarks.mk
 
+##CHANGES HERE: NEW VARIABLE
+micro_rtl_tests 	= $(addprefix rtl+,$(patsubst \,,$(rtl_micro_tests)))
+
 rtl_tests 	= $(addprefix rtl+,$(patsubst \,,$(all_rtl_tests)))
 gate_tests 	= $(addprefix gate+,$(patsubst \,,$(all_gate_tests)))
 spike_tests = $(addprefix spike+,$(patsubst \,,$(all_spike_tests)))
@@ -50,7 +53,7 @@ smpts 			= $(addprefix smpt+,$(patsubst \,,$(all_smpt_bmarks)))
 
 .PHONY: all rtl spec $(rtl_tests) $(spec_tests)
 all:	$(rtl_tests)
-rtl:	$(rtl_tests)
+rtl:	$(micro_rtl_tests)
 gate:	$(gate_tests)
 spike:	$(spike_tests)
 chkpt: 	${chkpts}
@@ -76,12 +79,13 @@ $(1):
 	sed -i 's/CONFIG_PLACE_HOLDER/$(4)/g' makefile;	\
 	sed -i 's:RISCV_INSTALL_DIR_PLACE_HOLDER:$(RISCV_INSTALL_DIR):g' makefile;	\
 	sed -i 's:VERILOG_SRC_DIR_PLACE_HOLDER:$(VERILOG_SRC_DIR):g' makefile;	\
-	csh -c 'add cadence2015; $(MAKE) -f makefile run_nc';	\
+#	csh -c 'add cadence2015; $(MAKE) -f makefile run_nc';	\
 	cd $(ANYCORE_TEST_DIR)
+
 endef
 
 # Call the macro rtl_test_rule(testcase,benchmark_location,benchmark,configuration,jobfile)  - No spaces between arguments
-$(foreach testcase,$(rtl_tests),$(eval $(call rtl_test_rule,$(testcase),$(word 2,$(subst	+, ,$(testcase))),$(word 3,$(subst +, ,$(testcase))),$(word 4,$(subst +, ,$(testcase))),$(word 5,$(subst +, ,$(testcase))))))
+$(foreach testcase,$(micro_rtl_tests),$(eval $(call rtl_test_rule,$(testcase),$(word 2,$(subst	+, ,$(testcase))),$(word 3,$(subst +, ,$(testcase))),$(word 4,$(subst +, ,$(testcase))),$(word 5,$(subst +, ,$(testcase))))))
 
 define gate_test_rule
 $(1):
@@ -114,7 +118,8 @@ micro-clean:
 	echo "MICRO_SRC_DIR = $(MICRO_SRC_DIR)"
 	+$(MAKE) -C $(MICRO_SRC_DIR) clean
 
-
+scratch-clean:
+	rm -rf ${SCRATCH_SPACE}/anycore_rtl_test
 
 ####################################################################################################
 ## This is used to run checkpoints of long benchmarks (e.g. SPEC) on the simulator.
