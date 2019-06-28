@@ -2,8 +2,7 @@
 
 ## Important paths ####################################
 # This is where all tests are run
-TOP = /afs/eos.ncsu.edu/lockers/research/ece/ericro/users/mmkarand
-SCRATCH_SPACE 		= $(TOP)/scratch
+SCRATCH_SPACE 		= /afs/eos.ncsu.edu/lockers/research/ece/ericro/users/mmkarand/scratch
 
 # This is the path where RISC-V tools are installed
 RISCV_INSTALL_DIR	= $(abspath ../install)
